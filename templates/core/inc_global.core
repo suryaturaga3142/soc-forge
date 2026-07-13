@@ -1,0 +1,22 @@
+CAPI=2:
+# NOTE: The reason for block:block instead of block:module_name is simple
+# FuseSoC automaticaly adds the entire directory to include path, so multiple
+# combinations with the same global include block is redundant.
+# Make a new global include block.
+name: {{project}}:{{block}}:{{block}}:{{version}}
+description: "Global includes block"
+
+filesets:
+  includes:
+    files:
+      - inc/: {is_include_file: true}
+    file_type: systemVerilogSource
+    # If using this please depend on other includes only
+    #depend:
+    #  - project:block:block:version
+
+targets:
+  default:
+    filesets:
+      - includes
+

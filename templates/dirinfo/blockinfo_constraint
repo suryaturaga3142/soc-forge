@@ -1,0 +1,3 @@
+type="constraint"
+board="ice40"
+pcf_name="default"

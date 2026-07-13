@@ -1,0 +1,59 @@
+CAPI=2:
+#name: {{project}}:{{block}}:{{module_name}}:{{version}}
+description: "Src FPGA based core file"
+
+filesets:
+  rtl:
+    files:
+      - src/{{module_name}}.sv
+      #- inc/<files>: {is_include_file: true}
+      #- src/<files>
+    file_type: systemVerilogSource
+    #depend:
+    #  - project:block:module_name:version
+
+  # For fpga
+  board_deps:
+    depend:
+      - {{project}}:{{board}}:{{pcf_name}}:{{version}}
+
+targets:
+  default:
+    filesets:
+      - rtl
+    toplevel: {{module_name}}
+
+  lint:
+    flow: lint
+    flow_options:
+      tool: verilator
+      mode: lint-only
+      verilator_options: ["-Wall", "--timing"]
+    filesets:
+      - rtl
+    toplevel: {{module_name}}
+
+  synth:
+    flow: generic
+    flow_options:
+      tool: yosys
+      yosys_options: ["-m", "slang"]
+      output_format: verilog
+      # Change as per requirement
+      arch: ice40
+    filesets:
+      - rtl
+    toplevel: {{module_name}}
+
+  fpga:
+    # For ice40
+    flow: icestorm
+    flow_options:
+      pnr: next
+      device: hx8k 
+      nextpnr_options: ["--pcf-allow-unconstrained"]
+    filesets:
+      - rtl
+      - board_deps
+    toplevel: {{module_name}}
+

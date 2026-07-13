@@ -1,0 +1,27 @@
+CAPI=2:
+name: {{project}}:{{block}}:{{module_name}}_tb:{{version}}
+description: "Src attached tb core file"
+
+filesets:
+  tb:
+    files:
+      - tb/{{module_name}}_tb.sv
+    file_type: systemVerilogSource
+    depend:
+      - {{project}}:{{block}}:{{module_name}}:{{version}}
+
+targets:
+  default:
+    filesets:
+      - tb
+    toplevel: {{module_name}}_tb
+
+  sim:
+    flow: sim
+    flow_options:
+      tool: icarus
+      iverilog_options: ["-g2012"]
+    filesets:
+      - tb
+    toplevel: {{module_name}}_tb
+

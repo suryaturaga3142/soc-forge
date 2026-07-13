@@ -1,0 +1,43 @@
+text=auto eol=lf
+
+*.sv            text eol=lf
+*.svh           text eol=lf
+*.v             text eol=lf
+*.vh            text eol=lf
+*.core          text eol=lf
+
+*.py            text eol=lf
+*.sh            text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.tcl           text eol=lf
+
+fusesoc.conf    text eol=lf
+Makefile        text eol=lf
+
+.gitignore      text eol=lf
+.gitattributes  text eol=lf
+
+*.pcf           text eol=lf
+*.sdc           text eol=lf
+
+*.md            text eol=lf
+*.txt           text eol=lf
+*.gtkw          text eol=lf
+
+*.vcd           binary
+*.fst           binary
+
+*.bin           binary
+*.bit           binary
+*.asc           binary
+*.db            binary
+*.sldb          binary
+
+*.pdf           binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
+

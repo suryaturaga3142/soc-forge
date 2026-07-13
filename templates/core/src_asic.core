@@ -1,0 +1,37 @@
+CAPI=2:
+name: {{project}}:{{block}}:{{module_name}}:{{version}}
+description: "Src ASIC based core file"
+
+filesets:
+  rtl:
+    files:
+      - src/{{module_name}}.sv
+      #- inc/<files>: {is_include_file: true}
+      #- src/<files>
+    file_type: systemVerilogSource
+    #depend:
+    #  - project:block:module_name:version
+
+  # For tech lib
+  lib_deps:
+    depend:
+      - project:libs:tech_lib:version
+
+targets:
+  default:
+    filesets:
+      - rtl
+    toplevel: {{module_name}}
+
+  lint:
+    flow: lint
+    flow_options:
+      tool: verilator
+      mode: lint-only
+      verilator_options: ["-Wall", "--timing"]
+    filesets:
+      - rtl
+    toplevel: {{module_name}}
+
+  # XXX: synth and further not implemented yet
+

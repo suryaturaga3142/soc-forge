@@ -1,0 +1,16 @@
+CAPI=2:
+# Separate board and pcf to allow multiple PCFs per board
+name: {{project}}:{{board}}:{{pcf_name}}:{{version}}
+description: "Physical constraints board"
+
+filesets:
+  constraints:
+    # Change if not a PCF
+    files:
+      - {{pcf_name}}.pcf: {file_type: PCF}
+
+targets:
+  default:
+    filesets: 
+      - constraints
+
