@@ -1,24 +1,9 @@
 #!/usr/bin/env python3
 
 import sys
-import re
+import shutil
 from pathlib import Path
-
-def parse_info_file(path):
-    # Reads a key="value" file into a Python dictionary
-    data = {}
-    if path.exists():
-        content = path.read_text()
-        for line in content.splitlines():
-            match = re.match(r'^(\w+)="(.*)"$', line.strip())
-            if match:
-                data[match.group(1)] = match.group(2)
-    return data
-
-def write_info_file(path, data):
-    # Writes a dictionary back to a file in key="value" format
-    lines = [f'{k}="{v}"' for k, v in data.items()]
-    path.write_text("\n".join(lines) + "\n")
+from sv_utils import parse_info_file, write_info_file, get_templates_dir, replace_template_vars
 
 def prompt_user(prompt_text, default_value):
     # Prompts the user, returning the input or the default if left empty
@@ -37,12 +22,15 @@ def main():
         print(f"Error: The directory '{project_dir}' does not exist.")
         sys.exit(1)
 
+    script_dir = Path(__file__).resolve().parent
+    templates_dir = get_templates_dir(script_dir)
+
     projectinfo_path = project_dir / ".projectinfo"
     constraint_info_path = project_dir / "constraints" / ".blockinfo"
 
     if not projectinfo_path.exists() or not constraint_info_path.exists():
         print(f"Error: Missing .projectinfo or constraints/.blockinfo in {project_dir}.")
-        print("Please ensure this is an initialized SV Buildsys project directory.")
+        print("Initialize the project first.")
         sys.exit(1)
 
     print(f"--- Interactive Configuration for {project_dir.name} ---")
@@ -79,8 +67,28 @@ def main():
     write_info_file(projectinfo_path, proj_data)
     write_info_file(constraint_info_path, const_data)
 
+    # Generate the constraints core file
+    src_core = templates_dir / "core" / "constraints_fpga.core"
+    dest_core_name = f"{const_data['board']}_{const_data['pcf_name']}.core"
+    dest_core = project_dir / "constraints" / dest_core_name
+
+    if src_core.exists():
+        shutil.copy(src_core, dest_core)
+        
+        # Apply the blind search-and-replace
+        replacements = {
+            "project": proj_data["project"],
+            "board": const_data["board"],
+            "pcf_name": const_data["pcf_name"],
+            "version": proj_data["version"]
+        }
+        replace_template_vars(dest_core, replacements)
+        print(f"\nGenerated constraints core: {dest_core.name}")
+    else:
+        print(f"\nWarning: Template not found at {src_core}. Constraints core skipped.")
+
     print("\nConfiguration complete!")
-    print(f"  Project Core Base: {proj_data['project']}:<block>:<module>:{proj_data['version']}")
+    print(f"  Modules Core: {proj_data['project']}:<block>:<module>:{proj_data['version']}")
     print(f"  Constraint Core:   {proj_data['project']}:{const_data['board']}:{const_data['pcf_name']}:{proj_data['version']}")
 
 if __name__ == "__main__":
