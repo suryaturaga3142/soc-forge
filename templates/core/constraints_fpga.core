@@ -7,7 +7,7 @@ filesets:
   constraints:
     # Change if not a PCF
     files:
-      - {{pcf_name}}.pcf: {file_type: PCF}
+      - {{board}}_{{pcf_name}}.pcf: {file_type: PCF}
 
 targets:
   default:
