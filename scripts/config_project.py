@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 
+# scripts/config_project.py
+
 import sys
 import shutil
+import subprocess
 from pathlib import Path
 from sv_utils import parse_info_file, write_info_file, get_templates_dir, replace_template_vars
 
@@ -86,6 +89,20 @@ def main():
         print(f"\nGenerated constraints core: {dest_core.name}")
     else:
         print(f"\nWarning: Template not found at {src_core}. Constraints core skipped.")
+
+    # FuseSoC library registration
+    print("\nRegistering project with FuseSoC...")
+    try:
+        subprocess.run(
+            ["fusesoc", "library", "add", proj_data["project"], "."], 
+            cwd=project_dir, 
+            check=True
+        )
+        print(f"Successfully registered library '{proj_data['project']}'.")
+    except FileNotFoundError:
+        print("Warning: 'fusesoc' command not found. Registration skipped.")
+    except subprocess.CalledProcessError as e:
+        print(f"Warning: FuseSoC registration failed with exit code {e.returncode}.")
 
     print("\nConfiguration complete!")
     print(f"  Modules Core: {proj_data['project']}:<block>:<module>:{proj_data['version']}")

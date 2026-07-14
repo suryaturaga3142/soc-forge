@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# scripts/new_block.py
+
 import argparse
 import shutil
 from pathlib import Path

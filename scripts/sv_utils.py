@@ -1,8 +1,10 @@
 #!/usr/bin/env python3
 
+# scripts/sv_utils.py
+
 import re
 import sys
-from pathlib import Path
+#from pathlib import Path
 
 def get_templates_dir(script_dir):
     # Reads prefs.env and resolves the templates directory path
@@ -52,4 +54,38 @@ def replace_template_vars(filepath, replacements):
         content = content.replace(target, str(val))
     
     filepath.write_text(content)
+
+def get_project_context(project_dir, block_name=None):
+    # Collects configuration data from .projectinfo, constraints/.blockinfo,
+    # and optionally blocks/<block_name>/.blockinfo.
+    # Returns a flat dictionary of the aggregated key-value pairs.
+
+    context = {}
+    
+    # Parse .projectinfo
+    proj_info_path = project_dir / ".projectinfo"
+    if proj_info_path.exists():
+        context.update(parse_info_file(proj_info_path))
+        
+    # Parse constraints/.blockinfo
+    const_info_path = project_dir / "constraints" / ".blockinfo"
+    if const_info_path.exists():
+        context.update(parse_info_file(const_info_path))
+        
+    # Parse blocks/<block_name>/.blockinfo (if provided and valid)
+    if block_name:
+        block_info_path = project_dir / "blocks" / block_name / ".blockinfo"
+        if block_info_path.exists():
+            b_info = parse_info_file(block_info_path)
+            
+            if "type" in b_info:
+                context["type"] = b_info["type"]
+                
+            # Normalize 'block' and 'name' keys into a single 'block' key for templating
+            if "block" in b_info:
+                context["block"] = b_info["block"]
+            elif "name" in b_info:
+                context["block"] = b_info["name"]
+                
+    return context
 

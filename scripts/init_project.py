@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+# scripts/init_project.py
+
 import os
 import sys
 import shutil

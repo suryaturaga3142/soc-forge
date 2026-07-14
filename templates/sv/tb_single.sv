@@ -32,6 +32,11 @@ end
 endtask
 
 initial begin
+    #10000 $display("Simulation timeout reached");
+    $finish;
+end
+
+initial begin
     reset_dut();
 
     // Testbench
