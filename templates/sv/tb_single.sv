@@ -41,7 +41,7 @@ initial begin
 
     // Testbench
 
-    $dumpfile("{{module_name}}_tb.vcd");
+    $dumpfile("dump_{{block}}_{{module_name}}_tb.vcd");
     $dumpvars(0, {{module_name}}_tb);
     $finish;
 end

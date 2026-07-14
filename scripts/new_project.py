@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-# scripts/init_project.py
+# scripts/new_project.py
 
 #import os
 import sys
@@ -46,7 +46,7 @@ def copy_template(src, dest):
 def main():
     if len(sys.argv) < 2:
         print("Error: No project directory provided.")
-        print("Usage: ./init_project.py <path_to_new_project>")
+        print("Usage: ./new_project.py <path_to_new_project>")
         sys.exit(1)
 
     project_dir = Path(sys.argv[1]).resolve()
