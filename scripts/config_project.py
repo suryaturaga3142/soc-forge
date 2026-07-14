@@ -9,7 +9,7 @@ from pathlib import Path
 from sv_utils import parse_info_file, write_info_file, get_templates_dir, replace_template_vars
 
 def prompt_user(prompt_text, default_value):
-    # Prompts the user, returning the input or the default if left empty
+    """ Prompts the user, returning the input or the default if left empty """
     user_input = input(f"{prompt_text} [{default_value}]: ").strip()
     return user_input if user_input else default_value
 

@@ -1,5 +1,5 @@
 CAPI=2:
-#name: {{project}}:{{block}}:{{module_name}}:{{version}}
+name: {{project}}:{{block}}:{{module_name}}:{{version}}
 description: "Src FPGA based core file"
 
 filesets:

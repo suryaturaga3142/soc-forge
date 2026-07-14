@@ -4,10 +4,9 @@
 
 import re
 import sys
-#from pathlib import Path
 
 def get_templates_dir(script_dir):
-    # Reads prefs.env and resolves the templates directory path
+    """ Reads prefs.env and resolves the templates directory path """
     prefs_path = script_dir / "prefs.env"
     if not prefs_path.exists():
         print(f"Error: {prefs_path} not found.")
@@ -23,7 +22,7 @@ def get_templates_dir(script_dir):
     sys.exit(1)
 
 def parse_info_file(path):
-    # Reads a key="value" file into a Python dictionary
+    """ Reads a key="value" file into a Python dictionary """
     data = {}
     if path.exists():
         content = path.read_text()
@@ -34,14 +33,14 @@ def parse_info_file(path):
     return data
 
 def write_info_file(path, data):
-    # Writes a dictionary back to a file in key="value" format
+    """ Writes a dictionary back to a file in key="value" format """
     lines = [f'{k}="{v}"' for k, v in data.items()]
     path.write_text("\n".join(lines) + "\n")
 
 def replace_template_vars(filepath, replacements):
     
-    # Blindly searches and replaces {{key}} with value in the given file.
-    # Takes a Path object and a dictionary of replacements.
+    """ Blindly searches and replaces {{key}} with value in the given file.
+    Takes a Path object and a dictionary of replacements. """
 
     if not filepath.exists():
         print(f"Warning: Cannot replace variables. File not found: {filepath}")
@@ -56,9 +55,9 @@ def replace_template_vars(filepath, replacements):
     filepath.write_text(content)
 
 def get_project_context(project_dir, block_name=None):
-    # Collects configuration data from .projectinfo, constraints/.blockinfo,
-    # and optionally blocks/<block_name>/.blockinfo.
-    # Returns a flat dictionary of the aggregated key-value pairs.
+    """ Collects configuration data from .projectinfo, constraints/.blockinfo,
+    and optionally blocks/<block_name>/.blockinfo.
+    Returns a flat dictionary of the aggregated key-value pairs. """
 
     context = {}
     

@@ -2,13 +2,13 @@
 
 # scripts/init_project.py
 
-import os
+#import os
 import sys
 import shutil
 from pathlib import Path
 
 def get_templates_dir():
-    # Reads prefs.env and resolves the templates directory path
+    """ Reads prefs.env and resolves the templates directory path """
     script_dir = Path(__file__).resolve().parent
     prefs_path = script_dir / "prefs.env"
     
